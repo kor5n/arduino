@@ -11,14 +11,14 @@
 #define FIRST_COL 2
 #define LAST_COL 7
 
-static const char *func_matrix[LAST_ROW-FIRST_ROW+1][LAST_COL-FIRST_COL+1] = {
-  {"+", "-", "x", "/", "=", "sqrt"},
-  {"1", "2", "3", "4", "back", "c"}
+static const char func_matrix[LAST_ROW-FIRST_ROW+1][LAST_COL-FIRST_COL+2] = {
+  "+-x/=r",
+  "1234bc"
 };
 
 Adafruit_LiquidCrystal lcd_1(0);
 
-const char *getInput()
+char getInput()
 {
   	int tmp;
   
@@ -42,8 +42,91 @@ const char *getInput()
     }
   	
   
-  	return NULL;
+  	return '\0';
 }
+
+/*static const int maxint = 9999999999999999;
+static char out[16];
+static int x = -1;
+static int y = -1;
+static char operation = "R";
+
+void calc()
+{
+  	// Operations requiring one value - sqrt
+  	
+  	if (x != -1 && y== -1 && operation="sqrt")
+    {
+    	
+    }
+  
+	if (x == -1 || y == -1 || operation = "N")
+    {
+    	return;
+    }
+  
+  	int tmp;
+  	switch(operation)
+    {
+    	case "+":
+      		tmp = String(x+y);
+      		break;
+      	case "-":
+      		tmp = String(x-y);
+      		break;
+      	case "x":
+      		tmp = String(x*y);
+      		break;
+      	case "/":
+      		tmp = String(x/y);
+      		break;
+    }
+  
+  	
+}*/
+
+char *composeVal(char input, char out[16])
+{
+  int found = 0;
+   
+  for (int i = 0; i < LAST_COL-FIRST_COL+1; i++)
+  {
+  	if (input == func_matrix[1][i])
+    {
+    	found = 1;
+        break;
+    }
+  }
+  if (found == 1)
+  {
+    int len = strlen(out);
+    if (input == 'b')
+    {
+		if (len > 0)
+        {
+        	out[len-1] = '\0';
+        }
+    	
+    }else if (input == 'c')
+    {
+    	out[0] = '\0';
+    }else
+    {
+      if (len < 15)
+      {
+      	out[len] = input;
+    	out[len+1] = '\0';
+      }
+    	
+    }
+  	
+  }
+  
+  return out;
+}
+
+static char out[16];
+static char input;
 
 void setup()
 {
@@ -67,12 +150,19 @@ void setup()
 
 void loop()
 {
-	const char* input = getInput();  
-  if (input != NULL)
+	input = getInput();  
+  Serial.println(input);
+  if (input != '\0')
   {
+    
+    composeVal(input, out);
+    
     lcd_1.clear();
-  	lcd_1.print(input);
+    Serial.println(out);
+    lcd_1.print(out);
+    
+    
   }
   //lcd_1.setBacklight(0);
-  delay(1); // Wait for 500 millisecond(s)
+  delay(250); // Wait for 500 millisecond(s)
 }
