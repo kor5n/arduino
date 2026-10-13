@@ -1,6 +1,7 @@
 // C++ code
 //
 #include <Adafruit_LiquidCrystal.h>
+#include <stdio.h>
 
 #define BUTTON_FIRST 2
 #define BUTTON_LAST 9
@@ -130,6 +131,7 @@ void getOper(char val[16], char operation)
 
 char *composeOut(char input, char out[16])
 {
+  Serial.println("INPUT: " + input);
   int found = 0;
    
   for (int i = 0; i < LAST_COL-FIRST_COL+1; i++)
